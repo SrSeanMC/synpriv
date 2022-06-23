@@ -128,26 +128,6 @@ if (NonPaged && SizeInBytes == 0x200000)
     }
 }
 
-typedef struct _SYSTEM_BIGPOOL_ENTRY
-{
-    union {
-        PVOID VirtualAddress;
-        ULONG_PTR NonPaged : 1;
-    };
-    ULONG_PTR SizeInBytes;
-    union {
-        UCHAR Tag[4];
-        ULONG TagUlong;
-    };
-} SYSTEM_BIGPOOL_ENTRY, * PSYSTEM_BIGPOOL_ENTRY;
-typedef struct _SYSTEM_BIGPOOL_INFORMATION {
-    ULONG Count;
-    SYSTEM_BIGPOOL_ENTRY AllocatedInfo[ANYSIZE_ARRAY];
-} SYSTEM_BIGPOOL_INFORMATION, * PSYSTEM_BIGPOOL_INFORMATION;
-
-SystemBigPoolInformation = 0x42
-}
-
 // Hooked EFI function SetVariable can be called from Windows with NtSetSystemEnvironmentValueEx
 EFI_STATUS EFIAPI mySetVariable(IN CHAR16* VariableName, IN EFI_GUID* VendorGuid, IN UINT32 Attributes, IN UINTN DataSize, IN VOID* Data) {
 
