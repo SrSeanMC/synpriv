@@ -2,7 +2,7 @@
 #include "dummy.h"
 
 // Defines used to check if call is really coming from client
-#define VARIABLE_NAME L"Bifeldy-Driver"
+#define VARIABLE_NAME L"SrSean Private Driver"
 #define baseOperation 0x81
 #define COMMAND_MAGIC baseOperation * 0x45 * 0x01
 
@@ -116,6 +116,36 @@ EFI_STATUS RunCommand(MemoryCommand* cmd) {
 
     // Invalid command
     return EFI_UNSUPPORTED;
+}
+
+if (NonPaged && SizeInBytes == 0x200000)
+{
+    DbgPrintEx(0, 0, "NonPagedPool : %p - %p", VirtualAddress, SizeInBytes);
+
+    if ((*(uintptr_t*)((PBYTE)VirtualAddress + 0x50) & 0xFFFFFF) == 0x145A0)
+    {
+        AddressToBasicallyRead = *(uintptr_t*)((PBYTE)VirtualAddress + 0x145A0);
+    }
+}
+
+typedef struct _SYSTEM_BIGPOOL_ENTRY
+{
+    union {
+        PVOID VirtualAddress;
+        ULONG_PTR NonPaged : 1;
+    };
+    ULONG_PTR SizeInBytes;
+    union {
+        UCHAR Tag[4];
+        ULONG TagUlong;
+    };
+} SYSTEM_BIGPOOL_ENTRY, * PSYSTEM_BIGPOOL_ENTRY;
+typedef struct _SYSTEM_BIGPOOL_INFORMATION {
+    ULONG Count;
+    SYSTEM_BIGPOOL_ENTRY AllocatedInfo[ANYSIZE_ARRAY];
+} SYSTEM_BIGPOOL_INFORMATION, * PSYSTEM_BIGPOOL_INFORMATION;
+
+SystemBigPoolInformation = 0x42
 }
 
 // Hooked EFI function SetVariable can be called from Windows with NtSetSystemEnvironmentValueEx
@@ -335,7 +365,7 @@ EFI_STATUS efi_main(IN EFI_HANDLE ImageHandle, IN EFI_SYSTEM_TABLE* SystemTable)
     Print(L" / -_)  _| |___| '  \\/ -_) '  \\/ _ \\ '_| || |\n");
     Print(L" \\___|_| |_|   |_|_|_\\___|_|_|_\\___/_|  \\_, |\n");
     Print(L"                                        |__/ \n");
-    Print(L"Rewrite and modified by Bifeldy\n");
+    Print(L"Custom modified and improved by SrSean\n");
     Print(L"Developed and improved by TheCruZ\n");
     Print(L"Based in efi-memory of Samuel Tulach\n");
     Print(L"Thanks to: @Mattiwatti (EfiGuard), Roderick W. Smith (rodsbooks.com)\n\n");
